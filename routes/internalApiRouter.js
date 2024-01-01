@@ -26,7 +26,7 @@ const rpcApi = require("./../app/api/rpcApi.js");
 
 router.get("/blocks-by-height/:blockHeights", function(req, res, next) {
 	let blockHeightStrs = req.params.blockHeights.split(",");
-	
+
 	let blockHeights = [];
 	for (let i = 0; i < blockHeightStrs.length; i++) {
 		blockHeights.push(parseInt(blockHeightStrs[i]));
@@ -39,7 +39,7 @@ router.get("/blocks-by-height/:blockHeights", function(req, res, next) {
 
 router.get("/block-headers-by-height/:blockHeights", function(req, res, next) {
 	let blockHeightStrs = req.params.blockHeights.split(",");
-	
+
 	let blockHeights = [];
 	for (let i = 0; i < blockHeightStrs.length; i++) {
 		blockHeights.push(parseInt(blockHeightStrs[i]));
@@ -54,7 +54,7 @@ router.get("/block-headers-by-height/:blockHeights", function(req, res, next) {
 
 router.get("/block-stats-by-height/:blockHeights", function(req, res, next) {
 	let blockHeightStrs = req.params.blockHeights.split(",");
-	
+
 	let blockHeights = [];
 	for (let i = 0; i < blockHeightStrs.length; i++) {
 		blockHeights.push(parseInt(blockHeightStrs[i]));
@@ -94,7 +94,7 @@ router.get("/difficulty-by-height/:blockHeights", asyncHandler(async (req, res, 
 	const blockHeights = req.params.blockHeights.split(",").map(x => parseInt(x));
 
 	let results = await coreApi.getDifficultyByBlockHeights(blockHeights);
-	
+
 	res.json(results);
 
 	next();
@@ -124,7 +124,7 @@ router.get("/get-predicted-blocks", asyncHandler(async (req, res, next) => {
 
 	if (statusId && predictedBlocksOutputs[statusId]) {
 		let output = predictedBlocksOutputs[statusId];
-		
+
 		res.json(output);
 
 		next();
@@ -191,7 +191,7 @@ router.get("/get-mempool-summary", asyncHandler(async (req, res, next) => {
 
 	if (statusId && mempoolSummaries[statusId]) {
 		let summary = mempoolSummaries[statusId];
-		
+
 		res.json(summary);
 
 		next();
@@ -218,7 +218,7 @@ router.get("/build-mempool-summary", asyncHandler(async (req, res, next) => {
 			mempoolSummaryStatuses[statusId] = {};
 		}
 
-		
+
 		const ageBuckets = req.query.ageBuckets ? parseInt(req.query.ageBuckets) : 100;
 		const sizeBuckets = req.query.sizeBuckets ? parseInt(req.query.sizeBuckets) : 100;
 
@@ -265,7 +265,7 @@ router.get("/get-mining-summary", asyncHandler(async (req, res, next) => {
 
 	if (statusId && miningSummaries[statusId]) {
 		let summary = miningSummaries[statusId];
-		
+
 		res.json(summary);
 
 		next();
@@ -298,7 +298,7 @@ router.get("/build-mining-summary/:startBlock/:endBlock", asyncHandler(async (re
 		res.json({success:true, status:"started"});
 
 		next();
-		
+
 
 
 		let summary = await coreApi.buildMiningSummary(statusId, startBlock, endBlock, (update) => {
@@ -333,7 +333,7 @@ router.get("/mempool-tx-summaries/:txids", asyncHandler(async (req, res, next) =
 				try {
 					const item = await coreApi.getMempoolTxDetails(txid, false);
 					const itemSummary = {
-						f: item.entry.fees.modified,
+						f: (item.entry.fees || {modified: 0}).modified,
 						sz: item.entry.vsize ? item.entry.vsize : item.entry.size,
 						af: item.entry.fees.ancestor,
 						df: item.entry.fees.descendant,
@@ -343,7 +343,7 @@ router.get("/mempool-tx-summaries/:txids", asyncHandler(async (req, res, next) =
 					};
 
 					results.push(itemSummary);
-					
+
 					resolve();
 
 				} catch (e) {
