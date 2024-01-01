@@ -255,6 +255,9 @@ function getBlockByHash(blockHash) {
 				block.coinbaseTx = tx;
 				block.totalFees = utils.getBlockTotalFeesFromCoinbaseTxAndBlockHeight(tx, block.height);
 				block.miner = utils.identifyMiner(tx, block.height);
+				block.nTx = block.tx.length;
+
+				console.log(block);
 				return block;
 			})
 		}).catch(function(err) {
