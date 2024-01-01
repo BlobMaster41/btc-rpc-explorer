@@ -216,7 +216,7 @@ mixin txList(visibleTxs, txCount, limit, offset, inputsByTxid, options={})
 								- var mempoolDetailsFee = ((mempoolDetails.fees && mempoolDetails.fees.modified) ? mempoolDetails.fees.modified : (mempoolDetails.fee ? mempoolDetails.fee : 0));
 
 								- txFee = new Decimal(mempoolDetailsFee);
-								- txFeeRate = txFee.times(coinConfig.baseCurrencyUnit.multiplier).dividedBy(mempoolDetails.vsize);
+								- txFeeRate = txFee.times(coinConfig.baseCurrencyUnit.multiplier).dividedBy((mempoolDetails || {vsize: 0}).vsize);
 
 
 							if (!coinbaseTx && totalIOValues.input && totalIOValues.output)
