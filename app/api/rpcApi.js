@@ -45,10 +45,10 @@ function getBlockchainInfo() {
 			}
 
 			resolve(getblockchaininfo);
-			
+
 		}).catch(reject);
 	});
-	
+
 }
 
 function getBlockCount() {
@@ -137,7 +137,7 @@ function getBlockStatsByHeight(height) {
 			return new Promise(function(resolve, reject) {
 				resolve(coinConfig.genesisBlockStatsByNetwork[global.activeBlockchain]);
 			});
-			
+
 		} else {
 			return getRpcDataWithParams({method:"getblockstats", parameters:[height]});
 		}
@@ -294,7 +294,7 @@ function getRawTransaction(txid, blockhash) {
 
 		} else {
 			let extra_params = blockhash ? [ blockhash ] : [];
-			getRpcDataWithParams({method:"getrawtransaction", parameters:[txid, 1, ...extra_params]}).then(function(result) {
+			getRpcDataWithParams({method:"getrawtransaction", parameters:[txid, 1]}).then(function(result) { //...extra_params
 				if (result == null || result.code && result.code < 0) {
 					return Promise.reject(result);
 				}
@@ -467,7 +467,7 @@ function getRpcData(cmd, verifyingConnection=false) {
 
 				if (Array.isArray(result) && result.length == 1) {
 					let result0 = result[0];
-					
+
 					if (result0 && result0.name && result0.name == "RpcError") {
 						logStats(cmd, false, new Date().getTime() - startTime, false);
 
@@ -503,7 +503,7 @@ function getRpcData(cmd, verifyingConnection=false) {
 				callback();
 			}
 		};
-		
+
 		rpcQueue.push({rpcCall:rpcCall});
 	});
 }
@@ -520,7 +520,7 @@ function getRpcDataWithParams(request, verifyingConnection=false) {
 
 		let rpcCall = async function(callback) {
 			let client = (request.method == "gettxoutsetinfo" ? global.rpcClientNoTimeout : global.rpcClient);
-			
+
 			try {
 				const rpcResult = await client.request(request.method, request.parameters);
 				const result = rpcResult.result;
@@ -565,7 +565,7 @@ function getRpcDataWithParams(request, verifyingConnection=false) {
 				callback();
 			}
 		};
-		
+
 		rpcQueue.push({rpcCall:rpcCall});
 	});
 }
