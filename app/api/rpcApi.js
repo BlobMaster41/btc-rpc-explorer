@@ -256,7 +256,7 @@ function getBlockByHash(blockHash) {
 				block.totalFees = utils.getBlockTotalFeesFromCoinbaseTxAndBlockHeight(tx, block.height);
 				block.miner = utils.identifyMiner(tx, block.height);
 				block.nTx = block.tx.length;
-				
+
 				return block;
 			})
 		}).catch(function(err) {
@@ -394,7 +394,6 @@ function getMempoolTxDetails(txid, includeAncDec=true) {
 			mempoolDetails.entry = result;
 
 			resolve();
-
 		}).catch(function(err) {
 			reject(err);
 		});
